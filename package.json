@@ -1,0 +1,9 @@
+{
+  "name": "flatten-path",
+  "version": "0.1.0",
+  "main": "index.js",
+  "repository": "https://github.com/cangzhang/flatten-path.git",
+  "author": "al <cangzan@gmail.com>",
+  "license": "MIT",
+  "private": false
+}
