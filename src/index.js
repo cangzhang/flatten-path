@@ -1,8 +1,9 @@
 const rawData = [
   `packages.json`,
   `readme.md`,
-  `src/components/hold/a/a.js`,
-  `src/components/hold/a/b.js`,
+  `src/components/hold/a/a/a.js`,
+  `src/components/hold/a/a/b.js`,
+  `src/components/hold/b/a/b.js`,
   `src/components/kiss/a/b.js`,
   `src/components/kiss/b/a.js`,
   `src/components/a/b.js`,
@@ -11,41 +12,50 @@ const rawData = [
   `utils/b/b.js`
 ];
 
+const getLastIdxOfSame = arr => {
+  const ret = []
+  const len = arr.length
+  let prior = -1
+  while (prior < len) {
+    prior++
+    const cur = arr[prior]
+    const next = arr[prior + 1]
+    if (cur !== next) {
+      ret.push(prior)
+    }
+  }
+  return ret
+}
+
 const flatten = (data) => {
   let ret = []
-  const arr = data.map(i => i.split(`/`))
 
-  arr.forEach((a, aIdx) => {
-    if (!ret[aIdx]) {
-      ret[aIdx] = []
-    }
-
-    const len = a.length
-    if (len === 1) {
-      ret[aIdx] = a
+  data.forEach((str, strIdx) => {
+    if (!str.includes(`/`)) {
+      ret[strIdx] = [str]
       return
     }
 
-    ret[aIdx] = [a[len - 1]]
-    for(let flag = len - 2; flag >= 0; flag--) {
-      const cur = a.slice(0, flag + 1).join(`/`)
-      const prev = a.slice(0, flag).join(`/`)
+    const pathArr = str.split(`/`);
+    const samePrefixArrLen = pathArr.map((p, pIdx) => {
+      const cur = pathArr.slice(0, pIdx + 1).join(`/`);
+      const samePrefixArr = data.filter(i => i.startsWith(`${cur}/`))
+      return samePrefixArr.length
+    })
 
-      const ledByCur = data.filter(i => i.startsWith(`${cur}/`))
-      const ledByPrev = data.filter(i => i.startsWith(`${prev}/`))
+    const indexes = getLastIdxOfSame(samePrefixArrLen)
+    const final = indexes.map((i, idx) => {
+      if (idx === 0) {
+        return pathArr.slice(0, i + 1).join(`/`)
+      }
 
-      if (ledByCur.length === ledByPrev.length) {
-        ret[aIdx] = [cur, ...ret[aIdx]]
-      }
-      if (ledByCur.length < ledByPrev.length) {
-        ret[aIdx] = [prev, cur, ...ret[aIdx]]
-      }
-    }
+      const left = indexes[idx - 1] + 1;
+      const p = pathArr.slice(left, i + 1).join(`/`)
+      return p
+    })
+    ret[strIdx] = final
   })
 
-  ret = ret.map(i => [...new Set(i)])
-
-  console.log(ret)
   return ret
 }
 
