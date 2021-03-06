@@ -59,5 +59,43 @@ const flatten = (data) => {
   return ret
 }
 
-flatten(rawData)
+const findByPaths = (obj, paths) => {
+  return paths.reduce((cur, p) => {
+    return cur[p]
+  }, obj)
+}
+
+const toTree = (arr, data) => {
+  let ret = {}
+
+  arr.forEach((paths, dIdx) => {
+    const len = paths.length;
+
+    if (len === 1) {
+      ret[paths[0]] = data[dIdx]
+      return 
+    }
+
+    paths.forEach((cur, idx) => {
+      const isLeaf = idx === len - 1
+      if (idx === 0) {
+        if (!ret[cur]) {
+          ret[cur] = isLeaf ? data[dIdx] : {}
+        }
+        return
+      }
+
+      const parentPath = paths.slice(0, idx)
+      const parentNode = findByPaths(ret, parentPath)
+      if (!parentNode[cur]) {
+        parentNode[cur] = isLeaf ? data[dIdx] : {}
+      }
+    })
+  })
+
+  return ret
+}
+
+const ret = flatten(rawData)
+const tree = toTree(ret, rawData)
 
