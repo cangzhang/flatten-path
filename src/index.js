@@ -11,95 +11,43 @@ const rawData = [
   `utils/b/b.js`
 ];
 
-const addToChildren = (node, arr) => {
-  const hasChild = arr.children.find(i => i.path === node.path);
-  if (hasChild) {
-    return
-  }
-
-  arr.children.push(node)
-}
-
-const findNodeByPath = (path = ``, source) => {
-  let ret = null;
-
-  for (const c of source.children) {
-    if (c.path === path) {
-      ret = c
-      break
-    }
-
-    if (c.children.length) {
-      ret = findNodeByPath(path, c)
-    }
-  }
-
-  return ret
-}
-
-const getResult = node => {
+const flatten = (data) => {
   let ret = []
-  if (!node.children.length) {
-    return ret.push(node.path)
-  }
+  const arr = data.map(i => i.split(`/`))
 
-  if (node.children.length === 1) {
-    return ret
-  }
+  arr.forEach((a, aIdx) => {
+    if (!ret[aIdx]) {
+      ret[aIdx] = []
+    }
 
-  node.children.forEach(i => {
-    const arr = getResult(i);
-    ret.concat(arr)
+    const len = a.length
+    if (len === 1) {
+      ret[aIdx] = a
+      return
+    }
+
+    ret[aIdx] = [a[len - 1]]
+    for(let flag = len - 2; flag >= 0; flag--) {
+      const cur = a.slice(0, flag + 1).join(`/`)
+      const prev = a.slice(0, flag).join(`/`)
+
+      const ledByCur = data.filter(i => i.startsWith(`${cur}/`))
+      const ledByPrev = data.filter(i => i.startsWith(`${prev}/`))
+
+      if (ledByCur.length === ledByPrev.length) {
+        ret[aIdx] = [cur, ...ret[aIdx]]
+      }
+      if (ledByCur.length < ledByPrev.length) {
+        ret[aIdx] = [prev, cur, ...ret[aIdx]]
+      }
+    }
   })
 
-  return ret
-}
-
-const convertToArr = tree => {
-  const ret = tree.children.map(t => {
-    const tmp = getResult(t)
-    return tmp
-  })
+  ret = ret.map(i => [...new Set(i)])
 
   console.log(ret)
-
   return ret
 }
 
-const flattenPath = (data) => {
-  const paths = {
-    path: ``,
-    children: []
-  }
-
-  data
-    .forEach((i) => {
-      const arr = i.split(`/`);
-      const len = arr.length;
-
-      arr.forEach((p, idx) => {
-        const parentArr = arr.slice(0, idx)
-        const path = [...parentArr, p].join(`/`)
-
-        const node = {
-          path,
-          children: [],
-        }
-
-        if (idx === 0) {
-          addToChildren(node, paths)
-          return
-        }
-
-        const parentNode = findNodeByPath(parentArr.join(`/`), paths)
-        addToChildren(node, parentNode)
-      })
-    });
-
-  convertToArr(paths)
-
-  return;
-}
-
-flattenPath(rawData)
+flatten(rawData)
 
