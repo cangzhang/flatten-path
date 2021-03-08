@@ -1,5 +1,5 @@
 {
-  "name": "flatten-path",
+  "name": "@al-c/flatten-path",
   "version": "0.1.0",
   "main": "dist/flatten-path.js",
   "module": "dist/flatten-path.esm.js",
