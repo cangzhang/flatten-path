@@ -1,3 +1,7 @@
+interface ITree {
+  [key: string]: ITree | string;
+}
+
 const getLastOccurrence = (arr: number[]) => {
   const ret = [];
   const len = arr.length;
@@ -13,7 +17,7 @@ const getLastOccurrence = (arr: number[]) => {
   return ret;
 };
 
-export const flatten = (data: string[]) => {
+export const flatten = (data: string[]): string[][] => {
   let ret = [];
 
   data.forEach((str, strIdx) => {
@@ -51,7 +55,7 @@ const findByPaths = (obj: object, paths: string[]) => {
   }, obj);
 };
 
-export const toTree = (arr: string[][], data: string[]) => {
+export const toTree = (arr: string[][], data: string[]): ITree => {
   let ret = {};
 
   arr.forEach((paths, dIdx) => {
@@ -82,4 +86,4 @@ export const toTree = (arr: string[][], data: string[]) => {
   return ret;
 };
 
-export const generateTree = (data: string[]) => toTree(flatten(data), data);
+export const makeTree = (data: string[]) => toTree(flatten(data), data);
