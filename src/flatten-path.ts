@@ -1,4 +1,4 @@
-interface ITree {
+export interface ITree {
   [key: string]: ITree | string;
 }
 
