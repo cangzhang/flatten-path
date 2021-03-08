@@ -1,4 +1,4 @@
-const getLastOccurrence = arr => {
+const getLastOccurrence = (arr: number[]) => {
   const ret = [];
   const len = arr.length;
   let prior = -1;
@@ -13,7 +13,7 @@ const getLastOccurrence = arr => {
   return ret;
 };
 
-export const flatten = (data) => {
+export const flatten = (data: string[]) => {
   let ret = [];
 
   data.forEach((str, strIdx) => {
@@ -45,13 +45,13 @@ export const flatten = (data) => {
   return ret;
 };
 
-const findByPaths = (obj, paths) => {
+const findByPaths = (obj: object, paths: string[]) => {
   return paths.reduce((cur, p) => {
     return cur[p];
   }, obj);
 };
 
-export const toTree = (arr, data) => {
+export const toTree = (arr: string[][], data: string[]) => {
   let ret = {};
 
   arr.forEach((paths, dIdx) => {
@@ -82,4 +82,4 @@ export const toTree = (arr, data) => {
   return ret;
 };
 
-
+export const generateTree = (data: string[]) => toTree(flatten(data), data);
