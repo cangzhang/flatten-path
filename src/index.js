@@ -12,7 +12,7 @@ const rawData = [
   `utils/b/b.js`
 ];
 
-const getLastIdxOfSame = arr => {
+const getLastOccurance = arr => {
   const ret = []
   const len = arr.length
   let prior = -1
@@ -43,7 +43,7 @@ const flatten = (data) => {
       return samePrefixArr.length
     })
 
-    const indexes = getLastIdxOfSame(samePrefixArrLen)
+    const indexes = getLastOccurance(samePrefixArrLen)
     const final = indexes.map((i, idx) => {
       if (idx === 0) {
         return pathArr.slice(0, i + 1).join(`/`)
