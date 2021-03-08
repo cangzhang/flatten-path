@@ -1,6 +1,6 @@
 {
   "name": "@al-c/flatten-path",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "dist/flatten-path.js",
   "module": "dist/flatten-path.esm.js",
   "repository": "https://github.com/cangzhang/flatten-path.git",
@@ -20,11 +20,9 @@
     "@rollup/plugin-commonjs": "17.1.0",
     "@rollup/plugin-node-resolve": "11.2.0",
     "rollup": "2.40.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-typescript2": "^0.30.0",
     "tslib": "^2.1.0",
     "typescript": "^4.2.3"
-  },
-  "dependencies": {
-    "rollup-plugin-peer-deps-external": "^2.2.4"
   }
 }
